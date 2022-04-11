@@ -7,7 +7,8 @@ interface SaleAttributtes {
   total: number;
 }
 
-interface SaleCreationAttributes extends Optional<SaleAttributtes, "id"> {}
+interface SaleCreationAttributes
+  extends Optional<SaleAttributtes, "id" | "total"> {}
 
 interface SaleInstace
   extends Model<SaleAttributtes, SaleCreationAttributes>,

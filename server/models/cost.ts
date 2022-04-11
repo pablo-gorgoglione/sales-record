@@ -1,4 +1,4 @@
-import { DataTypes, Optional, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import db from "../db/connection";
 
 interface CostAttributes {
@@ -6,12 +6,8 @@ interface CostAttributes {
   unit_cost: number;
   createdAt: string;
 }
-interface CostCreationAttributes
-  extends Optional<CostAttributes, "product_id"> {}
 
-interface CostInstance
-  extends Model<CostAttributes, CostCreationAttributes>,
-    CostAttributes {}
+interface CostInstance extends Model<CostAttributes>, CostAttributes {}
 const Cost = db.define<CostInstance>(
   "cost",
   {

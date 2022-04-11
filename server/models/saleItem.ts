@@ -1,27 +1,28 @@
 import { DataTypes, Optional, Model } from "sequelize";
 import db from "../db/connection";
 
-interface ItemSaleAttributes {
+interface SaleItemAttributes {
   id: number;
   product_id: number;
   sale_id: number;
   quantity: number;
   unit_price: number;
+  unit_cost: number;
   subtotal: number;
   profit: number;
 }
 
-interface ItemSaleCreationAttributes
-  extends Optional<ItemSaleAttributes, "id"> {}
-interface ItemsaleInstance
-  extends Model<ItemSaleAttributes, ItemSaleCreationAttributes>,
-    ItemSaleAttributes {
+interface SaleItemCreationAttributes
+  extends Optional<SaleItemAttributes, "id"> {}
+interface SaleItemInstance
+  extends Model<SaleItemAttributes, SaleItemCreationAttributes>,
+    SaleItemAttributes {
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-const ItemSale = db.define<ItemsaleInstance>(
-  "item_sale",
+const SaleItem = db.define<SaleItemInstance>(
+  "sale_item",
   {
     id: {
       type: DataTypes.UUID,
@@ -43,10 +44,12 @@ const ItemSale = db.define<ItemsaleInstance>(
     profit: { type: DataTypes.NUMBER, allowNull: true },
     quantity: { type: DataTypes.NUMBER, allowNull: false },
     unit_price: { type: DataTypes.NUMBER, allowNull: false },
+    unit_cost: { type: DataTypes.NUMBER, allowNull: false },
   },
   {
     updatedAt: false,
+    createdAt: false,
   }
 );
 
-export default ItemSale;
+export default SaleItem;

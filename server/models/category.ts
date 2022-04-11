@@ -15,7 +15,7 @@ interface CategoryInstance
 }
 
 const Category = db.define<CategoryInstance>(
-  "user",
+  "categories",
   {
     id: {
       type: DataTypes.UUID,
