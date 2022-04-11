@@ -2,8 +2,7 @@ import asyncHandler from "express-async-handler";
 import { Response, Request } from "express";
 import Product from "../models/product";
 
-// @desc  Create a product
-// @route POST /api/product/login
+// @route POST /api/product/
 // @acess Private
 export const postProduct = asyncHandler(async (req: Request, res: Response) => {
   const { name, description, stock, category_id } = req.body;
@@ -17,12 +16,18 @@ export const postProduct = asyncHandler(async (req: Request, res: Response) => {
   });
   if (product) {
     //if there is a user with the email, and the password match then:
-    res
-      .status(201)
-      .json({ message: "product successfully created", ...product });
+    res.status(201).json({ ...product });
     return;
   }
 
   res.status(401);
-  throw new Error("Invalid email or password");
+  throw new Error("Invalid product data");
+});
+
+// @route POST /api/product/login
+// @acess Private
+export const getProducts = asyncHandler(async (req: Request, res: Response) => {
+  const productList = await Product.findAll({});
+  res.status(200).json(productList);
+  return;
 });
