@@ -23,10 +23,9 @@ export const protect = asyncHandler(
         if (tempUser) {
           req.user = {
             id: tempUser.id,
-            iat: 0,
-            exp: 0,
-            name: tempUser?.name,
-            isAdmin: false,
+            iat: decoded.iat,
+            exp: decoded.exp,
+            name: tempUser.name,
           };
         } else {
           res.status(401);
