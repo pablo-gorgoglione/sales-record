@@ -3,19 +3,18 @@ import { Response, Request } from "express";
 import Sale from "../models/sale";
 import SaleItem from "../models/saleItem";
 import { latestCost, latestPrice } from "./PriceCostController";
-import db from "../db/connection";
+import { db } from "../db/connection";
 
 interface ClientItemSale {
   productId: number;
   qty: number;
 }
 
-//the client send the productList with and the server search for the latest cost and price to
-// fill the data on the saleItem
-
 // @route POST /api/sales
 // @acess Private
 export const postSale = asyncHandler(async (req: Request, res: Response) => {
+  //the client send the productList and the server search for the latest cost and price
+  //fill the data on the saleItem
   const { productList }: { productList: Array<ClientItemSale> } = req.body;
   const userId = req.user?.id as number;
 
@@ -34,9 +33,8 @@ export const postSale = asyncHandler(async (req: Request, res: Response) => {
     try {
       const cost = await latestCost(product.productId);
       const price = await latestPrice(product.productId);
-      const profit = price - cost;
+      const profit = (price - cost) * product.qty;
       const subtotal = price * product.qty;
-      console.log(subtotal);
       total = total + subtotal;
 
       await SaleItem.create({
@@ -50,7 +48,6 @@ export const postSale = asyncHandler(async (req: Request, res: Response) => {
       });
       //if is the last item of the array save the sale.
       if (idx === productList.length - 1) {
-        console.log(`index: ${idx}, total:${total}`);
         sale.total = total;
         await sale.save();
         t.commit();
@@ -66,14 +63,30 @@ export const postSale = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-// @route GET /api/sales
+// @route GET /api/sales/idSale
 // @acess Private
 export const getSale = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id as number;
-  const sale = await Sale.findOne({ where: { user_id: userId } });
+  const saleId = req.params.saleId;
+  const sale = await Sale.findByPk(saleId);
   if (sale) {
     const saleItems = await SaleItem.findAll({ where: { sale_id: sale.id } });
-    res.json({ sale, saleItems });
+    res.json({ sale: sale.toJSON(), saleItems });
     return;
   }
+  res.status(404);
+  throw new Error("Sale not found");
+});
+
+// @route GET /api/sales
+// @acess Private
+export const getSales = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user?.id as number;
+  const sales = await Sale.findAll({ where: { user_id: userId } });
+  if (sales) {
+    res.json(sales);
+    return;
+  }
+  res.json({ message: "No data" });
+  return;
 });

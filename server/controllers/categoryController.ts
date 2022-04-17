@@ -2,8 +2,7 @@ import asyncHandler from "express-async-handler";
 import { Response, Request } from "express";
 import Category from "../models/category";
 
-// @desc  Create a product category
-// @route POST /api/product/login
+// @route POST /api/categories
 // @acess Private
 export const postCategory = asyncHandler(
   async (req: Request, res: Response) => {
@@ -13,11 +12,23 @@ export const postCategory = asyncHandler(
       name,
     });
     if (category) {
-      res.status(201).json({ ...category });
+      res.status(200).json(category.toJSON());
       return;
     }
+    res.status(400);
+    throw new Error("Error creating the category");
+  }
+);
 
-    res.status(401);
-    throw new Error("Error - talk to the admin");
+// @route GET /api/categories
+// @acess Private
+export const getCategories = asyncHandler(
+  async (req: Request, res: Response) => {
+    const categories = await Category.findAll({});
+    if (categories) {
+      res.status(200).json(categories);
+      return;
+    }
+    res.status(200).json({ message: "no data" });
   }
 );

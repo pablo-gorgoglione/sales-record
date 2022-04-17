@@ -4,7 +4,6 @@ import { Response, Request } from "express";
 import User from "../models/user";
 import generateToken from "../utils/generateToken";
 
-// @desc  Login a valid user
 // @route POST /api/users/login
 // @acess Public
 export const login = asyncHandler(async (req: Request, res: Response) => {
@@ -22,12 +21,10 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     });
     return;
   }
-
   res.status(401);
   throw new Error("Invalid email or password");
 });
 
-// @desc  Register a new user
 // @route POST /api/users
 // @acess Public
 export const register = asyncHandler(async (req: Request, res: Response) => {
