@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import db from "../db/connection";
+import { db } from "../db/connection";
 
 interface CostAttributes {
   product_id: number;
