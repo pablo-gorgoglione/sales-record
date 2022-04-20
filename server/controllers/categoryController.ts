@@ -26,7 +26,14 @@ export const getCategories = asyncHandler(
   async (req: Request, res: Response) => {
     const categories = await Category.findAll({});
     if (categories) {
-      res.status(200).json(categories);
+      res.status(200).json(
+        categories.map((c) => {
+          return {
+            ...c.toJSON(),
+            createdAt: c.createdAt?.toLocaleString(),
+          };
+        })
+      );
       return;
     }
     res.status(200).json({ message: "no data" });
