@@ -1,8 +1,9 @@
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import { Response, Request } from "express";
-import User from "../models/user";
+import User, { UserInstance } from "../models/user";
 import generateToken from "../utils/generateToken";
+import { UserWithOutId, UserWithOutPassword, UserWithToken } from "../types";
 
 // @route POST /api/users/login
 // @acess Public
@@ -29,27 +30,36 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 // @acess Public
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const { email, password, name, lastname } = req.body;
+
+  validateEmail(email, res);
+
+  const newUser = await generateUser({ email, lastname, name, password });
+
+  res.status(201).json(newUser);
+  return;
+});
+
+const validateEmail = async (email: string, res: Response) => {
   const user = await User.findOne({ where: { email: email } });
   if (user) {
     res.status(400);
     throw new Error("User already exist");
   }
-  // hash the password
+};
+
+const generateUser = async (user: UserWithOutId): Promise<UserWithToken> => {
+  const { email, lastname, name, password } = user;
+
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
   const newUser = await User.create({
-    email: email,
+    email,
     password: hashPassword,
-    id: 0,
-    lastname: lastname,
-    name: name,
+    lastname,
+    name,
   });
-  res.status(201).json({
-    id: newUser.id,
-    name: newUser.name,
-    lasname: newUser.lastname,
-    email: newUser.email,
-    token: generateToken(newUser.id),
-  });
-  return;
-});
+  const token = generateToken(newUser.id);
+  const { password: pw, ...userWithoutPassword } = newUser.toJSON();
+  console.log(userWithoutPassword);
+  return { ...userWithoutPassword, token };
+};
