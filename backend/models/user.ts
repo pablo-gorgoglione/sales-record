@@ -2,7 +2,7 @@ import { DataTypes, Optional, Model } from "sequelize";
 import { db } from "../db/connection";
 import Sale from "./sale";
 
-interface UserAttributes {
+export interface UserAttributes {
   id: number;
   email: string;
   password: string;
@@ -12,7 +12,7 @@ interface UserAttributes {
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
 
-interface UserInstance
+export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
     UserAttributes {
   createdAt?: Date;

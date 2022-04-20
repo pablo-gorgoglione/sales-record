@@ -7,7 +7,8 @@ interface CategoryAttributes {
 }
 interface CategoryCreationAttributes
   extends Optional<CategoryAttributes, "id"> {}
-interface CategoryInstance
+
+export interface CategoryInstance
   extends Model<CategoryAttributes, CategoryCreationAttributes>,
     CategoryAttributes {
   createdAt?: Date;

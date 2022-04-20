@@ -7,7 +7,7 @@ interface CostAttributes {
   createdAt: string;
 }
 
-interface CostInstance extends Model<CostAttributes>, CostAttributes {}
+export interface CostInstance extends Model<CostAttributes>, CostAttributes {}
 const Cost = db.define<CostInstance>(
   "cost",
   {

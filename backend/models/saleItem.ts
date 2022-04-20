@@ -14,7 +14,7 @@ interface SaleItemAttributes {
 
 interface SaleItemCreationAttributes
   extends Optional<SaleItemAttributes, "id"> {}
-interface SaleItemInstance
+export interface SaleItemInstance
   extends Model<SaleItemAttributes, SaleItemCreationAttributes>,
     SaleItemAttributes {
   createdAt?: Date;

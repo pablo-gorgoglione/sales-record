@@ -10,7 +10,7 @@ interface SaleAttributtes {
 interface SaleCreationAttributes
   extends Optional<SaleAttributtes, "id" | "total"> {}
 
-interface SaleInstace
+export interface SaleInstace
   extends Model<SaleAttributtes, SaleCreationAttributes>,
     SaleAttributtes {
   createdAt?: Date;

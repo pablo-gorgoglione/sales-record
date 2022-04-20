@@ -11,7 +11,7 @@ interface ProductAttributes {
 
 interface ProductCreationAttributes extends Optional<ProductAttributes, "id"> {}
 
-interface ProductInstance
+export interface ProductInstance
   extends Model<ProductAttributes, ProductCreationAttributes>,
     ProductAttributes {
   createdAt?: Date;
@@ -49,4 +49,5 @@ const Product = db.define<ProductInstance>(
     updatedAt: false,
   }
 );
+
 export default Product;

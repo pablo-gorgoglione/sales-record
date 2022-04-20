@@ -6,7 +6,9 @@ interface PriceAttributes {
   unit_price: number;
   createdAt: string;
 }
-interface PriceInstance extends Model<PriceAttributes>, PriceAttributes {}
+export interface PriceInstance
+  extends Model<PriceAttributes>,
+    PriceAttributes {}
 const Price = db.define<PriceInstance>(
   "price",
   {
