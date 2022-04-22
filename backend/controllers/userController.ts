@@ -16,7 +16,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     res.status(200).json({
       id: user.id,
       name: user.name,
-      lasname: user.lastname,
+      lastname: user.lastname,
       email: user.email,
       token: generateToken(user.id),
     });

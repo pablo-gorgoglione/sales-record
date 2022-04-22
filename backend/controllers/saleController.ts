@@ -63,7 +63,7 @@ export const postSale = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-// @route GET /api/sales/idSale
+// @route GET /api/sales/:idSale
 // @acess Private
 export const getSale = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id as number;
@@ -84,7 +84,12 @@ export const getSales = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user?.id as number;
   const sales = await Sale.findAll({ where: { user_id: userId } });
   if (sales) {
-    res.json(sales);
+    res.json(
+      sales.map((s) => {
+        const { total, id, createdAt } = s;
+        return { id, total, createdAt };
+      })
+    );
     return;
   }
   res.json({ message: "No data" });
